@@ -5,6 +5,7 @@ const db = require("./db");
 
 //Routes import
 const userRoutes = require("./routes/users");
+const profileRoutes = require("./routes/profile");
 
 // Passport
 const passport = require("passport");
@@ -19,10 +20,11 @@ passport.use(jwtStrategy);
 
 // Routes
 app.use(userRoutes);
+app.use("/profile", profileRoutes);
 
 const run = async () => {
   try {
-    await db.sync();
+    await db.sync({ alter: true });
     console.log("connection to database successful");
   } catch (error) {
     console.error("Error connecting to the database: ", error);
