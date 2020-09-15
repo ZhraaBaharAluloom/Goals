@@ -1,3 +1,12 @@
 const User = require("./User");
+const Profile = require("./Profile");
 
-module.exports = { User };
+// User & Profile
+User.hasOne(Profile, {
+  as: "profile",
+  foreignKey: "userId",
+});
+
+Profile.belongsTo(User, { as: "user" });
+
+module.exports = { User, Profile };
