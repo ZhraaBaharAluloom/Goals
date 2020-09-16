@@ -1,4 +1,4 @@
-const { Goal } = require("../db/models");
+const { Goal, Profile, Progress } = require("../db/models");
 
 exports.fetchGoal = async (goalId, next) => {
   try {
@@ -12,7 +12,9 @@ exports.fetchGoal = async (goalId, next) => {
 exports.goalList = async (req, res, next) => {
   try {
     const goals = await Goal.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
     });
     res.json(goals);
   } catch (error) {
@@ -27,7 +29,14 @@ exports.createGoal = async (req, res, next) => {
         req.file.filename
       }`;
     }
+    const foundProfile = await Profile.findOne({
+      where: { userId: req.user.id },
+    });
     const newGoal = await Goal.create(req.body);
+    const newProgress = await Progress.create({
+      goalId: newGoal.id,
+      profileId: foundProfile.id,
+    });
     res.status(201).json(newGoal);
   } catch (error) {
     next(error);
