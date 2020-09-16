@@ -6,6 +6,7 @@ const db = require("./db");
 //Routes import
 const userRoutes = require("./routes/users");
 const profileRoutes = require("./routes/profile");
+const goalRoutes = require("./routes/goal");
 
 // Passport
 const passport = require("passport");
@@ -21,6 +22,7 @@ passport.use(jwtStrategy);
 // Routes
 app.use(userRoutes);
 app.use("/profile", profileRoutes);
+app.use("/goals", goalRoutes);
 
 const run = async () => {
   try {
