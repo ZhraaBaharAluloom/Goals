@@ -8,6 +8,7 @@ Profile.init(
   {
     overallProgress: {
       type: DataTypes.STRING,
+      defaultValue: 0,
     },
   },
   {

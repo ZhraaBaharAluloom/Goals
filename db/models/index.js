@@ -1,16 +1,19 @@
 const User = require("./User");
 const Profile = require("./Profile");
 const Goal = require("./Goal");
+const Progress = require("./Progress");
 
-// User & Profile
+// The User has One Profile
 User.hasOne(Profile, {
   as: "profile",
   foreignKey: "userId",
 });
 Profile.belongsTo(User, { as: "user" });
 
-// Goals & Profiles
-Goal.belongsToMany(Profile, { through: "Progress", foreignKey: "goalId" });
-Profile.belongsToMany(Goal, { through: "Progress", foreignKey: "profileId" });
+// A Profile can track many Goals Through Progress
+Profile.belongsToMany(Goal, { through: Progress, foreignKey: "profileId" });
 
-module.exports = { User, Profile, Goal };
+// A Goal can be tracked by many Profiles Through Progress
+Goal.belongsToMany(Profile, { through: Progress, foreignKey: "goalId" });
+
+module.exports = { User, Profile, Progress, Goal };
