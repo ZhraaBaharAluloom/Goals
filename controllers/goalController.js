@@ -5,7 +5,7 @@ exports.fetchGoal = async (goalId, next) => {
     const goal = await Goal.findByPk(goalId);
     return goal;
   } catch (error) {
-    console.log("exports.fetchGoal -> error", error);
+    next(error);
   }
 };
 
@@ -16,7 +16,7 @@ exports.goalList = async (req, res, next) => {
     });
     res.json(goals);
   } catch (error) {
-    console.log("exports.goalList -> error", error);
+    next(error);
   }
 };
 
@@ -30,6 +30,6 @@ exports.createGoal = async (req, res, next) => {
     const newGoal = await Goal.create(req.body);
     res.status(201).json(newGoal);
   } catch (error) {
-    console.log("exports.createGoal -> error", error);
+    next(error);
   }
 };
