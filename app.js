@@ -24,6 +24,19 @@ app.use(userRoutes);
 app.use("/profile", profileRoutes);
 app.use("/goals", goalRoutes);
 
+//Not Found Paths
+app.use((req, res, next) => {
+  const error = new Error("Path Not Found");
+  error.status = 404;
+  next(error);
+});
+
+//Error Handling Middleware
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.json(err.message || "Internal Server Error");
+});
+
 const run = async () => {
   try {
     await db.sync({ alter: true });
