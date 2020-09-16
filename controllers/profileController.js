@@ -14,7 +14,7 @@ exports.updateProfile = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log("exports.updateProfile -> error", error);
+    next(error);
   }
 };
 
