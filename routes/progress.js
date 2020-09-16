@@ -1,15 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const upload = require("../middleware/multer");
+
 const {
-  createGoal,
-  fetchGoal,
-  goalList,
-} = require("../controllers/goalController");
+  goalProgressUpdate,
+  fetchProgress,
+} = require("../controllers/progressController");
 
 router.param("goalId", async (req, res, next, goalId) => {
-  const goal = await fetchGoal(goalId, next);
+  const goal = await fetchProgress(goalId, next);
   if (goal) {
     req.goal = goal;
     next();
@@ -20,15 +19,11 @@ router.param("goalId", async (req, res, next, goalId) => {
   }
 });
 
-// Goal List
-router.get("/", goalList);
-
-// Create new goal
-router.post(
-  "/",
+// Update Goal Progress
+router.put(
+  "/:goalId",
   passport.authenticate("jwt", { session: false }),
-  upload.single("image"),
-  createGoal
+  goalProgressUpdate
 );
 
 module.exports = router;
