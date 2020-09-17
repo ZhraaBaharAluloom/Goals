@@ -8,6 +8,7 @@ const {
   goalList,
   updateGoal,
   findGoal,
+  followGoal,
 } = require("../controllers/goalController");
 
 router.param("goalId", async (req, res, next, goalId) => {
@@ -42,6 +43,12 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   upload.single("image"),
   updateGoal
+);
+
+router.post(
+  "/:goalId",
+  passport.authenticate("jwt", { session: false }),
+  followGoal
 );
 
 module.exports = router;
