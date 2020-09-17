@@ -10,6 +10,8 @@ User.hasOne(Profile, {
 });
 Profile.belongsTo(User, { as: "user" });
 
+// REVIEW: doesn't it make more sense to have the relation between the User and the Goal?
+
 // A Profile can track many Goals Through Progress
 Profile.belongsToMany(Goal, { through: Progress, foreignKey: "profileId" });
 

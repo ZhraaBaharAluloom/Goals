@@ -4,6 +4,7 @@ const db = require("../db");
 
 class Profile extends Model {}
 
+// REVIEW: isn's this part of the table between the profile and goals?
 Profile.init(
   {
     overallProgress: {
