@@ -8,6 +8,7 @@ exports.fetchGoal = async (goalId, next) => {
     next(error);
   }
 };
+
 exports.findGoal = async (req, res, next) => {
   try {
     const goal = await Goal.findByPk(req.goal.id, {
@@ -60,6 +61,7 @@ exports.createGoal = async (req, res, next) => {
     next(error);
   }
 };
+
 exports.updateGoal = async (req, res, next) => {
   try {
     const foundGoal = await Progress.findOne({
@@ -82,6 +84,23 @@ exports.updateGoal = async (req, res, next) => {
       err.status = 404;
       next(err);
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.followGoal = async (req, res, next) => {
+  try {
+    const foundProfile = await Profile.findOne({
+      where: { userId: req.user.id },
+    });
+    const foundGoal = await Goal.findByPk(req.goal.id);
+    const newProgress = await Progress.create({
+      goalId: foundGoal.id,
+      profileId: foundProfile.id,
+    });
+
+    res.status(201).json(newProgress);
   } catch (error) {
     next(error);
   }
