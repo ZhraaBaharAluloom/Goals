@@ -8,6 +8,7 @@ exports.fetchGoal = async (goalId, next) => {
     next(error);
   }
 };
+
 exports.findGoal = async (req, res, next) => {
   try {
     const goal = await Goal.findByPk(req.goal.id, {
@@ -27,12 +28,6 @@ exports.goalList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
-      include: [
-        {
-          model: Profile,
-          attributes: ["id"],
-        },
-      ],
     });
     res.json(goals);
   } catch (error) {
@@ -60,6 +55,7 @@ exports.createGoal = async (req, res, next) => {
     next(error);
   }
 };
+
 exports.updateGoal = async (req, res, next) => {
   try {
     const foundGoal = await Progress.findOne({
@@ -76,6 +72,27 @@ exports.updateGoal = async (req, res, next) => {
         }`;
       }
       await req.goal.update(req.body);
+      res.status(201).end();
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 404;
+      next(err);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteGoal = async (req, res, next) => {
+  try {
+    const foundProfile = await Profile.findOne({
+      where: { userId: req.user.id },
+    });
+    const foundGoal = await Progress.findOne({
+      where: { goalId: req.goal.id },
+    });
+    if (foundGoal.profileId === foundProfile.id) {
+      await req.goal.destroy();
       res.status(201).end();
     } else {
       const err = new Error("Unauthorized");
