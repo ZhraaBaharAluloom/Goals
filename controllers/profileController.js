@@ -1,4 +1,5 @@
-const { Profile, User } = require("../db/models");
+const { Profile, User, Goal } = require("../db/models");
+const Progress = require("../db/models/Progress");
 
 exports.updateProfile = async (req, res, next) => {
   try {
@@ -27,6 +28,10 @@ exports.profileList = async (req, res, next) => {
           model: User,
           as: "user",
           attributes: ["username", "firstName", "lastName"],
+        },
+        {
+          model: Goal,
+          attributes: ["id"],
         },
       ],
     });
