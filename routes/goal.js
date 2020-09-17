@@ -6,6 +6,8 @@ const {
   createGoal,
   fetchGoal,
   goalList,
+  updateGoal,
+  findGoal,
 } = require("../controllers/goalController");
 
 router.param("goalId", async (req, res, next, goalId) => {
@@ -23,12 +25,23 @@ router.param("goalId", async (req, res, next, goalId) => {
 // Goal List
 router.get("/", goalList);
 
+// Goal List
+router.get("/:goalId", findGoal);
+
 // Create new goal
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   upload.single("image"),
   createGoal
+);
+
+// Create new goal
+router.put(
+  "/:goalId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  updateGoal
 );
 
 module.exports = router;

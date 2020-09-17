@@ -8,6 +8,18 @@ exports.fetchGoal = async (goalId, next) => {
     next(error);
   }
 };
+exports.findGoal = async (req, res, next) => {
+  try {
+    const goal = await Goal.findByPk(req.goal.id, {
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+    res.json(goal);
+  } catch (error) {
+    next(error);
+  }
+};
 
 exports.goalList = async (req, res, next) => {
   try {
@@ -15,6 +27,12 @@ exports.goalList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
+      include: [
+        {
+          model: Profile,
+          attributes: ["id"],
+        },
+      ],
     });
     res.json(goals);
   } catch (error) {
@@ -38,6 +56,32 @@ exports.createGoal = async (req, res, next) => {
       profileId: foundProfile.id,
     });
     res.status(201).json(newGoal);
+  } catch (error) {
+    next(error);
+  }
+};
+exports.updateGoal = async (req, res, next) => {
+  try {
+    const foundGoal = await Progress.findOne({
+      where: { goalId: req.goal.id },
+    });
+    const foundProfile = await Profile.findOne({
+      where: { userId: req.user.id },
+    });
+
+    if (foundGoal.profileId === foundProfile.id) {
+      if (req.file) {
+        req.body.image = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
+      }
+      await req.goal.update(req.body);
+      res.status(201).end();
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 404;
+      next(err);
+    }
   } catch (error) {
     next(error);
   }
