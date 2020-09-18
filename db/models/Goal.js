@@ -21,9 +21,11 @@ Goal.init(
     target: {
       type: DataTypes.INTEGER,
     },
+    // REVIEW: Isn't the category supposed to be its own model?
     category: {
       type: DataTypes.STRING,
     },
+    // REVIEW: How is the popularity calculated?
     popularity: {
       type: DataTypes.INTEGER,
     },
