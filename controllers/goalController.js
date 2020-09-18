@@ -83,22 +83,18 @@ exports.updateGoal = async (req, res, next) => {
   }
 };
 
-exports.deleteGoal = async (req, res, next) => {
+exports.followGoal = async (req, res, next) => {
   try {
     const foundProfile = await Profile.findOne({
       where: { userId: req.user.id },
     });
-    const foundGoal = await Progress.findOne({
-      where: { goalId: req.goal.id },
+    const foundGoal = await Goal.findByPk(req.goal.id);
+    const newProgress = await Progress.create({
+      goalId: foundGoal.id,
+      profileId: foundProfile.id,
     });
-    if (foundGoal.profileId === foundProfile.id) {
-      await req.goal.destroy();
-      res.status(201).end();
-    } else {
-      const err = new Error("Unauthorized");
-      err.status = 404;
-      next(err);
-    }
+
+    res.status(201).json(newProgress);
   } catch (error) {
     next(error);
   }
