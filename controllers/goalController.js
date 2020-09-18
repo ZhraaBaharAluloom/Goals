@@ -28,12 +28,6 @@ exports.goalList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
-      include: [
-        {
-          model: Profile,
-          attributes: ["id"],
-        },
-      ],
     });
     res.json(goals);
   } catch (error) {

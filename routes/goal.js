@@ -8,6 +8,7 @@ const {
   goalList,
   updateGoal,
   findGoal,
+
   followGoal,
 } = require("../controllers/goalController");
 
@@ -26,7 +27,7 @@ router.param("goalId", async (req, res, next, goalId) => {
 // Goal List
 router.get("/", goalList);
 
-// Goal List
+// Search for a Goal by its id
 router.get("/:goalId", findGoal);
 
 // Create new goal
@@ -37,13 +38,14 @@ router.post(
   createGoal
 );
 
-// Create new goal
+// Update goal
 router.put(
   "/:goalId",
   passport.authenticate("jwt", { session: false }),
   upload.single("image"),
   updateGoal
 );
+
 
 router.post(
   "/:goalId",
