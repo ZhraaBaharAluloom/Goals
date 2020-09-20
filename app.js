@@ -8,6 +8,7 @@ const userRoutes = require("./routes/users");
 const profileRoutes = require("./routes/profile");
 const goalRoutes = require("./routes/goal");
 const progressRoutes = require("./routes/progress");
+const categoryRoutes = require("./routes/category");
 
 // Passport
 const passport = require("passport");
@@ -25,6 +26,7 @@ app.use(userRoutes);
 app.use("/profile", profileRoutes);
 app.use("/goals", goalRoutes);
 app.use("/progress", progressRoutes);
+app.use("/cat", categoryRoutes);
 
 //Not Found Paths
 app.use((req, res, next) => {

@@ -1,4 +1,4 @@
-const { Goal, Profile, Progress } = require("../db/models");
+const { Goal, Profile, Progress, Category, Tag } = require("../db/models");
 
 exports.fetchGoal = async (goalId, next) => {
   try {
@@ -28,6 +28,9 @@ exports.goalList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
+      include: {
+        model: Category,
+      },
     });
     res.json(goals);
   } catch (error) {
@@ -46,10 +49,36 @@ exports.createGoal = async (req, res, next) => {
       where: { userId: req.user.id },
     });
     const newGoal = await Goal.create(req.body);
+
+    if (req.body.category) {
+      const fetchCategory = await Category.findOne({
+        where: { name: req.body.category },
+      });
+      if (fetchCategory) {
+        const _catId = fetchCategory.id;
+        const newTag = await Tag.create({
+          goalId: newGoal.id,
+          catId: _catId,
+        });
+      } else {
+        const newCategory = {
+          name: req.body.category,
+        };
+        const newCat = await Category.create(newCategory);
+        const _catId = newCat.id;
+        const newTag = await Tag.create({
+          goalId: newGoal.id,
+          catId: _catId,
+          name: newCat.name,
+        });
+      }
+    }
+
     const newProgress = await Progress.create({
       goalId: newGoal.id,
       profileId: foundProfile.id,
     });
+
     res.status(201).json(newGoal);
   } catch (error) {
     next(error);
@@ -82,6 +111,26 @@ exports.updateGoal = async (req, res, next) => {
     next(error);
   }
 };
+exports.deleteGoal = async (req, res, next) => {
+  try {
+    const foundGoal = await Progress.findOne({
+      where: { goalId: req.goal.id },
+    });
+    const foundProfile = await Profile.findOne({
+      where: { userId: req.user.id },
+    });
+    if (foundGoal.profileId === foundProfile.id) {
+      await req.goal.destroy();
+      res.status(204).end();
+    } else {
+      const err = new Error("Unauthorized");
+      err.status = 404;
+      next(err);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 exports.followGoal = async (req, res, next) => {
   try {
@@ -92,6 +141,9 @@ exports.followGoal = async (req, res, next) => {
     const newProgress = await Progress.create({
       goalId: foundGoal.id,
       profileId: foundProfile.id,
+      attributes: {
+        exclude: ["updatedAt", "createdAt"],
+      },
     });
 
     res.status(201).json(newProgress);

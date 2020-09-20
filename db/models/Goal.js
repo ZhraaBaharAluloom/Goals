@@ -21,9 +21,6 @@ Goal.init(
     target: {
       type: DataTypes.INTEGER,
     },
-    category: {
-      type: DataTypes.STRING,
-    },
     popularity: {
       type: DataTypes.INTEGER,
     },
