@@ -8,8 +8,8 @@ const {
   goalList,
   updateGoal,
   findGoal,
-
   followGoal,
+  deleteGoal,
 } = require("../controllers/goalController");
 
 router.param("goalId", async (req, res, next, goalId) => {
@@ -46,6 +46,13 @@ router.put(
   updateGoal
 );
 
+// Delete goal
+router.delete(
+  "/:goalId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  deleteGoal
+);
 
 router.post(
   "/:goalId",
