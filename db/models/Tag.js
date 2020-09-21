@@ -8,6 +8,7 @@ Tag.init(
   {
     name: {
       type: DataTypes.STRING,
+      defaultValue: "I am a Tag",
     },
   },
   {
