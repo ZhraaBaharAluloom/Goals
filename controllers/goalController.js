@@ -1,22 +1,17 @@
-const { Goal, Profile, Progress, Category, Tag } = require("../db/models");
+const {
+  Goal,
+  Profile,
+  Progress,
+  Category,
+  Tag,
+  User,
+} = require("../db/models");
+const { create } = require("../db/models/Tag");
 
 exports.fetchGoal = async (goalId, next) => {
   try {
     const goal = await Goal.findByPk(goalId);
     return goal;
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.findGoal = async (req, res, next) => {
-  try {
-    const goal = await Goal.findByPk(req.goal.id, {
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
-    });
-    res.json(goal);
   } catch (error) {
     next(error);
   }
@@ -32,6 +27,17 @@ exports.goalList = async (req, res, next) => {
         model: Category,
       },
     });
+
+    const countOfFollowers = await Progress.count({
+      where: { name: req.body.goalId },
+    });
+
+    const countOfUsers = await User.count();
+
+    const countOfTagUses = await Tag.count({
+      where: { name: req.body.tag },
+    });
+
     res.json(goals);
   } catch (error) {
     next(error);
@@ -45,38 +51,24 @@ exports.createGoal = async (req, res, next) => {
         req.file.filename
       }`;
     }
-    const foundProfile = await Profile.findOne({
+    const profile = await Profile.findOne({
       where: { userId: req.user.id },
     });
-    const newGoal = await Goal.create(req.body);
+    const newGoal = await Goal.create({ ...req.body, ownerId: profile.id });
 
-    if (req.body.category) {
-      const fetchCategory = await Category.findOne({
-        where: { name: req.body.category },
-      });
-      if (fetchCategory) {
-        const _catId = fetchCategory.id;
-        const newTag = await Tag.create({
-          goalId: newGoal.id,
-          catId: _catId,
-        });
-      } else {
-        const newCategory = {
-          name: req.body.category,
-        };
-        const newCat = await Category.create(newCategory);
-        const _catId = newCat.id;
-        const newTag = await Tag.create({
-          goalId: newGoal.id,
-          catId: _catId,
-          name: newCat.name,
-        });
-      }
-    }
-
-    const newProgress = await Progress.create({
+    await Progress.create({
       goalId: newGoal.id,
-      profileId: foundProfile.id,
+      profileId: profile.id,
+    });
+
+    const category = await Category.findOrCreate({
+      where: { name: req.body.category },
+    });
+
+    await Tag.create({
+      goalId: newGoal.id,
+      catId: category[0].id,
+      name: req.body.tag,
     });
 
     res.status(201).json(newGoal);
@@ -87,14 +79,14 @@ exports.createGoal = async (req, res, next) => {
 
 exports.updateGoal = async (req, res, next) => {
   try {
-    const foundGoal = await Progress.findOne({
+    const foundGoal = await Goal.findOne({
       where: { goalId: req.goal.id },
     });
-    const foundProfile = await Profile.findOne({
+    const profile = await Profile.findOne({
       where: { userId: req.user.id },
     });
 
-    if (foundGoal.profileId === foundProfile.id) {
+    if (foundGoal.ownerId === profile.id) {
       if (req.file) {
         req.body.image = `${req.protocol}://${req.get("host")}/media/${
           req.file.filename
@@ -111,22 +103,19 @@ exports.updateGoal = async (req, res, next) => {
     next(error);
   }
 };
+
 exports.deleteGoal = async (req, res, next) => {
   try {
-    const foundGoal = await Progress.findOne({
-      where: { goalId: req.goal.id },
-    });
-    const foundProfile = await Profile.findOne({
+    const profile = await Profile.findOne({
       where: { userId: req.user.id },
     });
-    if (foundGoal.profileId === foundProfile.id) {
-      await req.goal.destroy();
-      res.status(204).end();
-    } else {
-      const err = new Error("Unauthorized");
-      err.status = 404;
-      next(err);
-    }
+
+    const foundGoal = await Progress.findOne({
+      where: { goalId: req.goal.id, profileId: profile.id },
+    });
+
+    foundGoal.destroy();
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -134,16 +123,12 @@ exports.deleteGoal = async (req, res, next) => {
 
 exports.followGoal = async (req, res, next) => {
   try {
-    const foundProfile = await Profile.findOne({
+    const profile = await Profile.findOne({
       where: { userId: req.user.id },
     });
-    const foundGoal = await Goal.findByPk(req.goal.id);
     const newProgress = await Progress.create({
-      goalId: foundGoal.id,
-      profileId: foundProfile.id,
-      attributes: {
-        exclude: ["updatedAt", "createdAt"],
-      },
+      goalId: req.goal.id,
+      profileId: profile.id,
     });
 
     res.status(201).json(newProgress);
