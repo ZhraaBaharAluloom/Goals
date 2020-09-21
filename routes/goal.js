@@ -54,6 +54,7 @@ router.delete(
   deleteGoal
 );
 
+// move to progres.js
 router.post(
   "/:goalId",
   passport.authenticate("jwt", { session: false }),

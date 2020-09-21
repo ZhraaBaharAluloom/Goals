@@ -1,11 +1,12 @@
 const { Profile, User, Goal } = require("../db/models");
-const Progress = require("../db/models/Progress");
+const Progress = require("../db/models/Progress"); // unused import
 
 exports.updateProfile = async (req, res, next) => {
   try {
     const foundProfile = await Profile.findOne({
       where: { userId: req.user.id },
     });
+    // no need for this condition
     if (req.user.id === foundProfile.userId) {
       await foundProfile.update(req.body);
       res.status(204).end();
@@ -21,6 +22,7 @@ exports.updateProfile = async (req, res, next) => {
 
 exports.profileList = async (req, res, next) => {
   try {
+    // is there a feature for viewing a list of profiles?
     const profile = await Profile.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [

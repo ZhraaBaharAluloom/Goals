@@ -5,6 +5,8 @@ const Progress = require("./Progress");
 const Category = require("./Category");
 const Tag = require("./Tag");
 
+// Goal has owner?
+
 // The User has One Profile
 User.hasOne(Profile, {
   as: "profile",
