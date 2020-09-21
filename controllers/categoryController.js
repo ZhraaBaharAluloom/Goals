@@ -1,9 +1,9 @@
 const { Category } = require("../db/models");
 
-exports.createCat = async (req, res, next) => {
+exports.createCategory = async (req, res, next) => {
   try {
-    const newCat = await Category.create(req.body);
-    res.status(201).json(newCat);
+    const newCategory = await Category.create(req.body);
+    res.status(201).json(newCategory);
   } catch (error) {
     next(error);
   }

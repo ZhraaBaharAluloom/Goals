@@ -21,7 +21,7 @@ Goal.init(
     target: {
       type: DataTypes.INTEGER,
     },
-    popularity: {
+    ownerId: {
       type: DataTypes.INTEGER,
     },
   },

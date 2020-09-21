@@ -7,7 +7,6 @@ const {
   fetchGoal,
   goalList,
   updateGoal,
-  findGoal,
   followGoal,
   deleteGoal,
 } = require("../controllers/goalController");
@@ -26,9 +25,6 @@ router.param("goalId", async (req, res, next, goalId) => {
 
 // Goal List
 router.get("/", goalList);
-
-// Search for a Goal by its id
-router.get("/:goalId", findGoal);
 
 // Create new goal
 router.post(
