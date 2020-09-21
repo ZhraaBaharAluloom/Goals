@@ -26,7 +26,7 @@ app.use(userRoutes);
 app.use("/profile", profileRoutes);
 app.use("/goals", goalRoutes);
 app.use("/progress", progressRoutes);
-app.use("/cat", categoryRoutes);
+app.use("/cat", categoryRoutes); // change to "/categories", this isn't about cats.
 
 //Not Found Paths
 app.use((req, res, next) => {
