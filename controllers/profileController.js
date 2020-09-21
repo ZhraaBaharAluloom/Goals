@@ -1,23 +1,18 @@
 const { Profile, User, Goal } = require("../db/models");
-const Progress = require("../db/models/Progress");
 
 exports.updateProfile = async (req, res, next) => {
   try {
     const foundProfile = await Profile.findOne({
       where: { userId: req.user.id },
     });
-    if (req.user.id === foundProfile.userId) {
-      await foundProfile.update(req.body);
-      res.status(204).end();
-    } else {
-      const err = new Error("Unauthorized");
-      err.status = 404;
-      next(err);
-    }
+    await foundProfile.update(req.body);
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
 };
+
+// Used for Testing Only.
 
 exports.profileList = async (req, res, next) => {
   try {
