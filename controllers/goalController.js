@@ -23,20 +23,25 @@ exports.goalList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
-      include: {
-        model: Category,
-      },
-    });
-
-    const countOfFollowers = await Progress.count({
-      where: { name: req.body.goalId },
+      include: [{ model: Profile }],
     });
 
     const countOfUsers = await User.count();
 
-    const countOfTagUses = await Tag.count({
-      where: { name: req.body.tag },
+    // Goal Popularity
+    goals.forEach(async (goal) => {
+      // Number of users following the goal (from the progress table) - Divided by - Number of users of the app.
+      const countOfFollowers = await Progress.count({
+        where: { goalId: goal.id },
+      });
+      goal.setDataValue("popularity", countOfFollowers / countOfUsers);
+
+      console.log(goal);
     });
+
+    // const countOfTagUses = await Tag.count({
+    //   where: { name: req.body.tag },
+    // });
 
     res.json(goals);
   } catch (error) {
@@ -65,10 +70,12 @@ exports.createGoal = async (req, res, next) => {
       where: { name: req.body.category },
     });
 
+    req.body.tag ? (tagName = req.body.tag) : (tagName = req.body.category);
+
     await Tag.create({
       goalId: newGoal.id,
       catId: category[0].id,
-      name: req.body.tag,
+      name: tagName,
     });
 
     res.status(201).json(newGoal);

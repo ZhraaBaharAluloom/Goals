@@ -9,7 +9,7 @@ Goal.init(
     name: {
       type: DataTypes.STRING,
     },
-    quantifiableUnits: {
+    description: {
       type: DataTypes.STRING,
     },
     unitOfMeasure: {
