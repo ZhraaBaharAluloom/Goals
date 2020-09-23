@@ -5,6 +5,7 @@ const passport = require("passport");
 const {
   goalProgressUpdate,
   fetchProgress,
+  progressList,
 } = require("../controllers/progressController");
 
 router.param("goalId", async (req, res, next, goalId) => {
@@ -25,5 +26,7 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   goalProgressUpdate
 );
+
+router.get("/", progressList);
 
 module.exports = router;
