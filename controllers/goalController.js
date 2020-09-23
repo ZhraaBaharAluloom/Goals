@@ -87,7 +87,7 @@ exports.createGoal = async (req, res, next) => {
 exports.updateGoal = async (req, res, next) => {
   try {
     const foundGoal = await Goal.findOne({
-      where: { goalId: req.goal.id },
+      where: { id: req.goal.id },
     });
     const profile = await Profile.findOne({
       where: { userId: req.user.id },
