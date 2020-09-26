@@ -35,8 +35,6 @@ exports.goalList = async (req, res, next) => {
         where: { goalId: goal.id },
       });
       goal.setDataValue("popularity", countOfFollowers / countOfUsers);
-
-      console.log(goal);
     });
 
     // const countOfTagUses = await Tag.count({
