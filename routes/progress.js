@@ -8,8 +8,10 @@ const {
   progressList,
 } = require("../controllers/progressController");
 
+const { fetchGoal } = require("../controllers/goalController");
+
 router.param("goalId", async (req, res, next, goalId) => {
-  const goal = await fetchProgress(goalId, next);
+  const goal = await fetchGoal(goalId, next);
   if (goal) {
     req.goal = goal;
     next();
