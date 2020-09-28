@@ -8,7 +8,9 @@ exports.categoryList = async (req, res, next) => {
       },
     });
     res.json(categoriesList);
-  } catch (error) {}
+  } catch (error) {
+    console.log("exports.categoryList -> error", error);
+  }
 };
 
 exports.createCategory = async (req, res, next) => {
