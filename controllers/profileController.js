@@ -22,11 +22,12 @@ exports.profileList = async (req, res, next) => {
         {
           model: User,
           as: "user",
-          attributes: ["username", "firstName", "lastName"],
+          attributes: { exclude: ["createdAt", "updatedAt", "password"] },
         },
         {
           model: Goal,
-          attributes: ["id"],
+          as: "goal",
+          attributes: { exclude: ["createdAt", "updatedAt"] },
         },
       ],
     });

@@ -1,5 +1,4 @@
 const { Progress } = require("../db/models");
-const Goal = require("../db/models/Goal");
 
 exports.fetchProgress = async (goalId, next) => {
   try {
@@ -16,11 +15,6 @@ exports.progressList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
-      include: [
-        {
-          model: Goal,
-        },
-      ],
     });
     res.json(progress);
   } catch (error) {
