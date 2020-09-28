@@ -24,13 +24,11 @@ exports.progressList = async (req, res, next) => {
 
 exports.goalProgressUpdate = async (req, res, next) => {
   try {
-    if (req.body) {
-      const newProgress = await req.goal.update(req.body);
-      const updatedProgress = await Progress.update(newProgress, {
-        where: { goalId: req.goal.id },
-      });
-      res.status(204).end();
-    }
+    const foundProgress = await Progress.findOne({
+      where: { goalId: req.goal.id },
+    });
+    await foundProgress.update(req.body);
+    res.status(204).end();
   } catch (error) {
     next(error);
   }

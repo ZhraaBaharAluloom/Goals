@@ -25,7 +25,7 @@ exports.goalList = async (req, res, next) => {
       },
     });
 
-    res.json(goals);
+   res.json(goals);
   } catch (error) {
     next(error);
   }
