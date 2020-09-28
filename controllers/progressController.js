@@ -1,5 +1,4 @@
 const { Progress } = require("../db/models");
-const Goal = require("../db/models/Goal");
 
 exports.fetchProgress = async (goalId, next) => {
   try {

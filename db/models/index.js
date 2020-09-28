@@ -13,10 +13,18 @@ User.hasOne(Profile, {
 Profile.belongsTo(User, { as: "user" });
 
 // A Profile can track many Goals Through Progress
-Profile.belongsToMany(Goal, { through: Progress, foreignKey: "profileId" });
+Profile.belongsToMany(Goal, {
+  through: Progress,
+  as: "goal",
+  foreignKey: "profileId",
+});
 
 // A Goal can be tracked by many Profiles Through Progress
-Goal.belongsToMany(Profile, { through: Progress, foreignKey: "goalId" });
+Goal.belongsToMany(Profile, {
+  through: Progress,
+  as: "profile",
+  foreignKey: "goalId",
+});
 
 // A goal cen be categorized in many categories
 Goal.belongsToMany(Category, { through: Tag, foreignKey: "goalId" });

@@ -20,6 +20,9 @@ Goal.init(
     },
     target: {
       type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: { msg: "Target is required" },
+      },
     },
     ownerId: {
       type: DataTypes.INTEGER,
