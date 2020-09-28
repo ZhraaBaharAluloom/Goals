@@ -1,12 +1,4 @@
-const {
-  Goal,
-  Profile,
-  Progress,
-  Category,
-  Tag,
-  User,
-} = require("../db/models");
-const { create } = require("../db/models/Tag");
+const { Goal, Profile, Progress, Category, Tag } = require("../db/models");
 
 exports.fetchGoal = async (goalId, next) => {
   try {
@@ -25,7 +17,7 @@ exports.goalList = async (req, res, next) => {
       },
     });
 
-   res.json(goals);
+    res.json(goals);
   } catch (error) {
     next(error);
   }
