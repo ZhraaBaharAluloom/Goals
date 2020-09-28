@@ -1,5 +1,14 @@
 const { Profile, User, Goal } = require("../db/models");
 
+exports.fetchProfile = async (profileId, next) => {
+  try {
+    const profile = await Profile.findByPk(profileId);
+    return profile;
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.updateProfile = async (req, res, next) => {
   try {
     const foundProfile = await Profile.findOne({
@@ -22,11 +31,12 @@ exports.profileList = async (req, res, next) => {
         {
           model: User,
           as: "user",
-          attributes: ["username", "firstName", "lastName"],
+          attributes: { exclude: ["createdAt", "updatedAt", "password"] },
         },
         {
           model: Goal,
-          attributes: ["id"],
+          as: "goal",
+          attributes: { exclude: ["createdAt", "updatedAt"] },
         },
       ],
     });

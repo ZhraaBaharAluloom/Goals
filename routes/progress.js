@@ -4,11 +4,13 @@ const passport = require("passport");
 
 const {
   goalProgressUpdate,
-  fetchProgress,
+  fetchGoalProgress,
+  fetchProfileProgress,
   progressList,
 } = require("../controllers/progressController");
 
 const { fetchGoal } = require("../controllers/goalController");
+const { fetchProfile } = require("../controllers/profileController");
 
 router.param("goalId", async (req, res, next, goalId) => {
   const goal = await fetchGoal(goalId, next);
@@ -22,12 +24,28 @@ router.param("goalId", async (req, res, next, goalId) => {
   }
 });
 
+router.param("profileId", async (req, res, next, profileId) => {
+  const profile = await fetchProfile(profileId, next);
+  if (profile) {
+    req.profile = profile;
+    next();
+  } else {
+    const err = new Error("Profile is not found");
+    err.status = 404;
+    next(err);
+  }
+});
+
 // Update Goal Progress
 router.put(
   "/:goalId",
   passport.authenticate("jwt", { session: false }),
   goalProgressUpdate
 );
+
+router.get("/goal/:goalId", fetchGoalProgress);
+
+router.get("/profile/:profileId", fetchProfileProgress);
 
 router.get("/", progressList);
 

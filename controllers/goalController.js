@@ -1,12 +1,4 @@
-const {
-  Goal,
-  Profile,
-  Progress,
-  Category,
-  Tag,
-  User,
-} = require("../db/models");
-const { create } = require("../db/models/Tag");
+const { Goal, Profile, Progress, Category, Tag } = require("../db/models");
 
 exports.fetchGoal = async (goalId, next) => {
   try {
@@ -23,23 +15,7 @@ exports.goalList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
-      include: [{ model: Profile }],
     });
-
-    const countOfUsers = await User.count();
-
-    // Goal Popularity
-    goals.forEach(async (goal) => {
-      // Number of users following the goal (from the progress table) - Divided by - Number of users of the app.
-      const countOfFollowers = await Progress.count({
-        where: { goalId: goal.id },
-      });
-      goal.setDataValue("popularity", countOfFollowers / countOfUsers);
-    });
-
-    // const countOfTagUses = await Tag.count({
-    //   where: { name: req.body.tag },
-    // });
 
     res.json(goals);
   } catch (error) {

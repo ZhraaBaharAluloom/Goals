@@ -1,10 +1,20 @@
 const { Progress } = require("../db/models");
-const Goal = require("../db/models/Goal");
 
-exports.fetchProgress = async (goalId, next) => {
+exports.fetchGoalProgress = async (req, res, next) => {
   try {
-    const goal = await Progress.findByPk(goalId);
-    return goal;
+    const goals = await Progress.findAll({ where: { goalId: req.goal.id } });
+    res.json(goals);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.fetchProfileProgress = async (req, res, next) => {
+  try {
+    const profiles = await Progress.findAll({
+      where: { profileId: req.profile.id },
+    });
+    res.json(profiles);
   } catch (error) {
     next(error);
   }
