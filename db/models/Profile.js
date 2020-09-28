@@ -7,7 +7,7 @@ class Profile extends Model {}
 Profile.init(
   {
     overallProgress: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       defaultValue: 0,
     },
   },
