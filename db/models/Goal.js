@@ -8,18 +8,23 @@ Goal.init(
   {
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     unitOfMeasure: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     image: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     target: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     ownerId: {
       type: DataTypes.INTEGER,

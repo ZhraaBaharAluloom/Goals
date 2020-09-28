@@ -67,8 +67,7 @@ exports.createGoal = async (req, res, next) => {
     const category = await Category.findOrCreate({
       where: { name: req.body.category },
     });
-
-    req.body.tag ? (tagName = req.body.tag) : (tagName = req.body.category);
+    const tagName = req.body.tag ? req.body.tag : req.body.category;
 
     await Tag.create({
       goalId: newGoal.id,
