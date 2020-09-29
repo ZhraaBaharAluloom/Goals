@@ -49,3 +49,12 @@ exports.signin = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.fetchUsers = async (userId, next) => {
+  try {
+    const user = await User.findByPk(userId);
+    return user;
+  } catch (error) {
+    next(error);
+  }
+};
