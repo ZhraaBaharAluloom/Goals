@@ -20,7 +20,6 @@ Goal.init(
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     target: {
       type: DataTypes.INTEGER,
