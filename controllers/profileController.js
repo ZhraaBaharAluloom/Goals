@@ -1,9 +1,23 @@
-const { Profile, User, Goal } = require("../db/models");
+const { Profile, User, Goal, Progress } = require("../db/models");
 
-exports.fetchProfile = async (profileId, next) => {
+const { fetchGoal } = require("./goalController");
+
+exports.fetchProfiles = async (profileId, next) => {
   try {
     const profile = await Profile.findByPk(profileId);
     return profile;
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.fetchUserProfile = async (req, res, next) => {
+  try {
+    const userProfile = await Profile.findOne({
+      where: { userId: req.user.id },
+    });
+
+    res.json(userProfile);
   } catch (error) {
     next(error);
   }

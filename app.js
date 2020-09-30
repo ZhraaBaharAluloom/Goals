@@ -11,6 +11,9 @@ const progressRoutes = require("./routes/progress");
 const categoryRoutes = require("./routes/category");
 const commentRoutes = require("./routes/comments");
 
+const tagRoutes = require("./routes/tag");
+
+
 // Passport
 const passport = require("passport");
 const { localStrategy, jwtStrategy } = require("./middleware/passport");
@@ -29,6 +32,8 @@ app.use("/goals", goalRoutes);
 app.use("/progress", progressRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/comments", commentRoutes);
+app.use("/tag", tagRoutes);
+
 
 //Not Found Paths
 app.use((req, res, next) => {
@@ -45,14 +50,14 @@ app.use((err, req, res, next) => {
 
 const run = async () => {
   try {
-    await db.sync({ alter: true });
+    await db.sync({ force: true });
   } catch (error) {
     console.error("Error connecting to the database: ", error);
   }
 
-  const PORT = process.env.PORT || 8000;
+  // const PORT = process.env.PORT || 8000;
 
-  app.listen(PORT, () => {
+  app.listen(8000, () => {
     console.log("The application is running on localhost:8000");
   });
 };

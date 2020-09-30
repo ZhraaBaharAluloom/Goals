@@ -10,7 +10,7 @@ const {
 } = require("../controllers/progressController");
 
 const { fetchGoal } = require("../controllers/goalController");
-const { fetchProfile } = require("../controllers/profileController");
+const { fetchProfiles } = require("../controllers/profileController");
 
 router.param("goalId", async (req, res, next, goalId) => {
   const goal = await fetchGoal(goalId, next);
@@ -25,7 +25,7 @@ router.param("goalId", async (req, res, next, goalId) => {
 });
 
 router.param("profileId", async (req, res, next, profileId) => {
-  const profile = await fetchProfile(profileId, next);
+  const profile = await fetchProfiles(profileId, next);
   if (profile) {
     req.profile = profile;
     next();
