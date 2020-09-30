@@ -9,6 +9,7 @@ const {
   updateGoal,
   followGoal,
   deleteGoal,
+  createComment,
 } = require("../controllers/goalController");
 
 router.param("goalId", async (req, res, next, goalId) => {
@@ -55,5 +56,8 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   followGoal
 );
+
+// Create a Comment
+router.post("/:goalId/comments", createComment);
 
 module.exports = router;

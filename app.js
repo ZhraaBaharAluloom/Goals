@@ -9,7 +9,10 @@ const profileRoutes = require("./routes/profile");
 const goalRoutes = require("./routes/goal");
 const progressRoutes = require("./routes/progress");
 const categoryRoutes = require("./routes/category");
+const commentRoutes = require("./routes/comments");
+
 const tagRoutes = require("./routes/tag");
+
 
 // Passport
 const passport = require("passport");
@@ -28,7 +31,9 @@ app.use("/profile", profileRoutes);
 app.use("/goals", goalRoutes);
 app.use("/progress", progressRoutes);
 app.use("/categories", categoryRoutes);
+app.use("/comments", commentRoutes);
 app.use("/tag", tagRoutes);
+
 
 //Not Found Paths
 app.use((req, res, next) => {

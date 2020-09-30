@@ -12,14 +12,16 @@ Goal.init(
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     unitOfMeasure: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     image: {
       type: DataTypes.STRING,
+      // allowNull: false,
+
     },
     target: {
       type: DataTypes.INTEGER,
