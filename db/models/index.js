@@ -4,6 +4,7 @@ const Goal = require("./Goal");
 const Progress = require("./Progress");
 const Category = require("./Category");
 const Tag = require("./Tag");
+const Comment = require("./Comment");
 
 // The User has One Profile
 User.hasOne(Profile, {
@@ -35,4 +36,8 @@ Category.belongsToMany(Goal, {
   foreignKey: "catId",
 });
 
-module.exports = { User, Profile, Progress, Goal, Category, Tag };
+// RelationShip between a Goal and Comments
+Goal.hasMany(Comment, { as: "comments", foreignKey: "goalId" });
+Comment.belongsTo(Goal, { as: "goal" });
+
+module.exports = { User, Profile, Progress, Goal, Category, Tag, Comment };

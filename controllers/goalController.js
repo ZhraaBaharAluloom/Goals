@@ -1,4 +1,11 @@
-const { Goal, Profile, Progress, Category, Tag } = require("../db/models");
+const {
+  Goal,
+  Profile,
+  Progress,
+  Category,
+  Tag,
+  Comment,
+} = require("../db/models");
 
 exports.fetchGoal = async (goalId, next) => {
   try {
@@ -15,6 +22,7 @@ exports.goalList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
+      include: { model: Comment, as: "comments", attributes: ["comment"] },
     });
 
     res.json(goals);
@@ -96,6 +104,18 @@ exports.deleteGoal = async (req, res, next) => {
 
     foundGoal.destroy();
     res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Create Comment
+exports.createComment = async (req, res, next) => {
+  try {
+    req.body.goalId = req.goal.id;
+    const newComment = await Comment.create(req.body);
+    console.log("COMMENT", newComment);
+    res.status(201).json(newComment);
   } catch (error) {
     next(error);
   }
