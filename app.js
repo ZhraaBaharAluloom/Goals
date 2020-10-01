@@ -13,7 +13,6 @@ const commentRoutes = require("./routes/comments");
 
 const tagRoutes = require("./routes/tag");
 
-
 // Passport
 const passport = require("passport");
 const { localStrategy, jwtStrategy } = require("./middleware/passport");
@@ -33,7 +32,6 @@ app.use("/progress", progressRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/comments", commentRoutes);
 app.use("/tag", tagRoutes);
-
 
 //Not Found Paths
 app.use((req, res, next) => {
@@ -55,9 +53,9 @@ const run = async () => {
     console.error("Error connecting to the database: ", error);
   }
 
-  // const PORT = process.env.PORT || 8000;
+  const PORT = process.env.PORT || 8000;
 
-  app.listen(8000, () => {
+  await app.listen(PORT, () => {
     console.log("The application is running on localhost:8000");
   });
 };

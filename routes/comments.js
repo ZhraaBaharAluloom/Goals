@@ -4,7 +4,6 @@ const {
   fetchComment,
   commentList,
   commentUpdate,
-  createComment,
 } = require("../controllers/commentController");
 
 // Param
