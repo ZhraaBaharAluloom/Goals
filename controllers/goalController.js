@@ -22,7 +22,10 @@ exports.goalList = async (req, res, next) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"],
       },
-      include: { model: Comment, as: "comments", attributes: ["comment"] },
+      include: [
+        { model: Comment, as: "comments", attributes: ["comment"] },
+        { model: Profile, as: "profile" },
+      ],
     });
 
     res.json(goals);
