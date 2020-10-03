@@ -1,7 +1,5 @@
 const { Profile, User, Goal, Progress } = require("../db/models");
 
-const { fetchGoal } = require("./goalController");
-
 exports.fetchProfiles = async (profileId, next) => {
   try {
     const profile = await Profile.findByPk(profileId);

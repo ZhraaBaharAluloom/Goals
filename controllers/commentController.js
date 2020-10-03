@@ -1,5 +1,4 @@
-const Comment = require("../db/models/Comment");
-const Goal = require("../db/models/Goal");
+const { Comment, Goal } = require("../db/models");
 
 // Fetch Comments
 exports.fetchComment = async (commentId, next) => {
