@@ -13,7 +13,6 @@ const commentRoutes = require("./routes/comments");
 
 const tagRoutes = require("./routes/tag");
 
-
 // Passport
 const passport = require("passport");
 const { localStrategy, jwtStrategy } = require("./middleware/passport");
@@ -34,7 +33,6 @@ app.use("/categories", categoryRoutes);
 app.use("/comments", commentRoutes);
 app.use("/tag", tagRoutes);
 
-
 //Not Found Paths
 app.use((req, res, next) => {
   const error = new Error("Path Not Found");
@@ -50,7 +48,7 @@ app.use((err, req, res, next) => {
 
 const run = async () => {
   try {
-    await db.sync({ force: true });
+    await db.sync();
   } catch (error) {
     console.error("Error connecting to the database: ", error);
   }
